@@ -1,0 +1,8 @@
+
+# Configuración privada
+config/credenciales.php
+.env
+
+# Archivos temporales
+*.log
+.vscode/
