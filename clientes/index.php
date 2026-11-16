@@ -50,9 +50,35 @@ $consulta = $conexion->query(
 
 $clientes = $consulta->fetchAll();
 
+
 if (isset($_GET['registrado'])) {
     $mensaje = 'Cliente registrado correctamente.';
 }
+
+if (isset($_GET['actualizado'])) {
+    $mensaje = 'Los datos del cliente se actualizaron correctamente.';
+}
+
+if (isset($_GET['eliminado'])) {
+    $mensaje = 'Cliente eliminado correctamente.';
+}
+
+if (isset($_GET['error'])) {
+    switch ($_GET['error']) {
+        case 'mascotas':
+            $error = 'No se puede eliminar este cliente porque tiene mascotas registradas.';
+            break;
+
+        case 'id':
+            $error = 'El identificador del cliente no es válido.';
+            break;
+
+        case 'eliminar':
+            $error = 'No se pudo eliminar el cliente. Intentá nuevamente.';
+            break;
+    }
+}
+
 
 function escapar($valor): string {
     return htmlspecialchars(
@@ -258,6 +284,7 @@ function escapar($valor): string {
                             <th>Nombre</th>
                             <th>Apellido</th>
                             <th>Teléfono</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
 
@@ -269,14 +296,70 @@ function escapar($valor): string {
                             <td><?= escapar($cliente['nombre']) ?></td>
                             <td><?= escapar($cliente['apellido']) ?></td>
                             <td><?= escapar($cliente['telefono']) ?></td>
+                            <td>
+    <div class="d-flex gap-2">
+
+        <a href="editar.php?id=<?= (int)$cliente['id_cliente'] ?>"
+           class="btn btn-sm btn-petcare">
+            <i class="bi bi-pencil-square"></i>
+            Editar
+        </a>
+
+        <form method="POST"
+              action="eliminar.php"
+              onsubmit="return confirm('¿Seguro que querés eliminar este cliente?');">
+
+            <input type="hidden"
+                   name="id"
+                   value="<?= (int)$cliente['id_cliente'] ?>">
+
+            <button type="submit"
+                    class="btn btn-sm btn-outline-danger">
+                <i class="bi bi-trash"></i>
+                Eliminar
+            </button>
+
+        </form>
+
+    </div>
+</td>
                         </tr>
                     <?php endforeach; ?>
 
                     <?php if (count($clientes) === 0): ?>
                         <tr>
-                            <td colspan="5" class="text-center">
+                            <td colspan="6" class="text-center">
                                 Todavía no hay clientes registrados.
                             </td>
+
+<td>
+    <div class="d-flex gap-2">
+
+        <a href="editar.php?id=<?= (int)$cliente['id_cliente'] ?>"
+           class="btn btn-sm btn-petcare">
+            <i class="bi bi-pencil-square"></i>
+            Editar
+        </a>
+
+        <form method="POST"
+              action="eliminar.php"
+              onsubmit="return confirm('¿Seguro que querés eliminar este cliente?');">
+
+            <input type="hidden"
+                   name="id"
+                   value="<?= (int)$cliente['id_cliente'] ?>">
+
+            <button type="submit"
+                    class="btn btn-sm btn-outline-danger">
+                <i class="bi bi-trash"></i>
+                Eliminar
+            </button>
+
+        </form>
+
+    </div>
+</td>
+
                         </tr>
                     <?php endif; ?>
                     </tbody>
