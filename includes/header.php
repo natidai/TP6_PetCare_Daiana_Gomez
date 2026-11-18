@@ -1,6 +1,12 @@
 
 <?php
 // Encabezado compartido de PetCare
+
+// Iniciar sesión si todavía no está iniciada.
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 $baseUrl = '/TP6_PetCare_Daiana_Gomez/';
 $tituloPagina = $tituloPagina ?? 'Gestión Veterinaria';
 
@@ -86,8 +92,35 @@ function escaparHtml($valor): string {
                     Consultas
                 </a>
 
+                <?php if (isset($_SESSION['id_usuario'])): ?>
+
+                    <!-- Usuario autenticado -->
+                    <a class="nav-link"
+                       href="<?= escaparHtml($baseUrl) ?>logout.php">
+                        <i class="bi bi-box-arrow-right"></i>
+                        Cerrar sesión
+                    </a>
+
+                <?php else: ?>
+
+                    <!-- Visitante -->
+                    <a class="nav-link"
+                       href="<?= escaparHtml($baseUrl) ?>login.php">
+                        <i class="bi bi-box-arrow-in-right"></i>
+                        Iniciar sesión
+                    </a>
+
+                    <a class="nav-link"
+                       href="<?= escaparHtml($baseUrl) ?>registro.php">
+                        <i class="bi bi-person-plus"></i>
+                        Registrarse
+                    </a>
+
+                <?php endif; ?>
+
             </div>
         </div>
 
     </div>
 </nav>
+
