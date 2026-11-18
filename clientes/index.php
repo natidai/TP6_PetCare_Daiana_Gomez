@@ -88,94 +88,11 @@ function escapar($valor): string {
     );
 }
 ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
 
-    <title>Clientes | PetCare</title>
-
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet">
-
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-        rel="stylesheet">
-
-    <style>
-        body {
-            background: #fff7fb;
-            color: #55334a;
-            font-family: Arial, sans-serif;
-        }
-
-        .navbar {
-            background: #c04483;
-        }
-
-        .titulo {
-            color: #9d2864;
-        }
-
-        .card {
-            border: 1px solid #f3d4e3;
-            border-radius: 18px;
-            box-shadow: 0 5px 18px rgba(157,40,100,.07);
-        }
-
-        .btn-petcare {
-            background: #c04483;
-            color: white;
-        }
-
-        .btn-petcare:hover {
-            background: #9d2864;
-            color: white;
-        }
-
-        .table thead th {
-            background: #f8d9e8;
-            color: #743254;
-        }
-
-        .huellitas {
-            color: #c04483;
-            text-align: center;
-            font-size: 1.5rem;
-            margin: 20px 0;
-        }
-
-        footer {
-            background: #f8d9e8;
-            border-top: 3px solid #c04483;
-            text-align: center;
-            padding: 20px;
-            margin-top: 50px;
-        }
-
-        footer p {
-            margin-bottom: 5px;
-            font-size: .9rem;
-        }
-    </style>
-</head>
-
-<body>
-
-<nav class="navbar navbar-dark">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="../index.php">
-            🐾 PetCare
-        </a>
-
-        <a href="../index.php" class="btn btn-light btn-sm">
-            <i class="bi bi-house"></i> Inicio
-        </a>
-    </div>
-</nav>
+<?php
+$tituloPagina = 'Gestión de clientes';
+require __DIR__ . '/../includes/header.php';
+?>
 
 <main class="container py-5">
 
@@ -375,15 +292,6 @@ function escapar($valor): string {
     </div>
 
 </main>
-
-<footer>
-    <p class="fw-bold">Trabajo Práctico N.º 6 – PetCare</p>
-    <p>Prácticas Profesionalizantes I</p>
-    <p>Profesor: Galo Nahuel Olguín Fernández</p>
-    <p>Instituto Superior de Formación Docente y Técnica N.º 24</p>
-    <p class="fw-bold">Desarrollado por Daiana Gómez</p>
-    <p>© 2026 – PetCare | Gestión Veterinaria</p>
-</footer>
-
-</body>
-</html>
+<?php
+require __DIR__ . '/../includes/footer.php';
+?>

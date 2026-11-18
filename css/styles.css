@@ -1,0 +1,229 @@
+
+/* ==========================================
+   PETCARE - ESTILOS GENERALES
+   TP N.º 6 - Prácticas Profesionalizantes I
+   ========================================== */
+
+:root {
+    --pink-primary: #c04483;
+    --pink-dark: #9d2864;
+    --pink-pastel: #f8d9e8;
+    --pink-light: #fce7f1;
+    --pink-background: #fff7fb;
+    --text-primary: #55334a;
+}
+
+/* Estructura general */
+
+body {
+    background: var(--pink-background);
+    color: var(--text-primary);
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* Navegación */
+
+.navbar {
+    background: var(--pink-primary);
+}
+
+/* Títulos */
+
+.titulo {
+    color: var(--pink-dark);
+}
+
+/* Tarjetas */
+
+.card {
+    border: 1px solid #f3d4e3;
+    border-radius: 18px;
+    box-shadow: 0 5px 18px rgba(157, 40, 100, .07);
+}
+
+/* Botones */
+
+.btn-petcare {
+    background: var(--pink-primary);
+    color: white;
+}
+
+.btn-petcare:hover,
+.btn-petcare:focus {
+    background: var(--pink-dark);
+    color: white;
+}
+
+/* Tablas */
+
+.table thead th {
+    background: var(--pink-pastel);
+    color: #743254;
+}
+
+/* Formularios */
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--pink-primary);
+    box-shadow: 0 0 0 .2rem rgba(192, 68, 131, .15);
+}
+
+/* Decoración */
+
+.huellitas {
+    color: var(--pink-primary);
+    text-align: center;
+    font-size: 1.5rem;
+    margin: 20px 0;
+}
+
+/* Pie de página */
+
+footer {
+    background: var(--pink-pastel);
+    border-top: 3px solid var(--pink-primary);
+    text-align: center;
+    padding: 20px;
+    margin-top: 50px;
+}
+
+footer p {
+    margin-bottom: 5px;
+    font-size: .9rem;
+}
+
+/* ==========================================
+   PETCARE - PANEL PRINCIPAL
+   ========================================== */
+
+/* Barra de navegación */
+
+.navbar {
+    box-shadow: 0 3px 12px rgba(157, 40, 100, 0.15);
+}
+
+.navbar-brand {
+    font-size: 1.6rem;
+}
+
+.navbar .nav-link {
+    color: white;
+}
+
+.navbar .nav-link:hover {
+    color: var(--pink-pastel);
+}
+
+/* Presentación principal */
+
+.hero {
+    background: linear-gradient(
+        120deg,
+        var(--pink-pastel),
+        var(--pink-light)
+    );
+    border-radius: 22px;
+    padding: 45px 35px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #f3c3da;
+}
+
+.hero h1 {
+    color: var(--pink-dark);
+}
+
+.hero p {
+    max-width: 650px;
+}
+
+.huella-decorativa {
+    position: absolute;
+    right: 35px;
+    top: 25px;
+    font-size: 7rem;
+    color: rgba(192, 68, 131, 0.15);
+    transform: rotate(-20deg);
+}
+
+/* Tarjetas de estadísticas */
+
+.stat-card {
+    border: 1px solid #f3d4e3;
+    border-radius: 20px;
+    box-shadow: 0 5px 18px rgba(157, 40, 100, 0.07);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(157, 40, 100, 0.15);
+}
+
+.icono-tarjeta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 65px;
+    height: 65px;
+    border-radius: 18px;
+    background: var(--pink-light);
+    color: var(--pink-primary);
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--pink-dark);
+}
+
+/* Botones del panel */
+
+.stat-card .btn-petcare {
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-weight: 600;
+}
+
+/* Decoración del panel */
+
+.huellitas {
+    color: #d98aaf;
+    font-size: 1.3rem;
+    letter-spacing: 12px;
+}
+
+/* Pie de página */
+
+footer {
+    margin-top: auto;
+}
+
+footer .autora {
+    font-weight: bold;
+    color: var(--pink-dark);
+}
+
+/* Adaptación a pantallas pequeñas */
+
+@media (max-width: 768px) {
+    .hero {
+        padding: 30px 22px;
+    }
+
+    .huella-decorativa {
+        font-size: 4rem;
+        right: 12px;
+        top: 12px;
+    }
+}
