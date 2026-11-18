@@ -1,14 +1,18 @@
-
 <?php
 // Encabezado compartido de PetCare
 
-// Iniciar sesión si todavía no está iniciada.
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
 $baseUrl = '/TP6_PetCare_Daiana_Gomez/';
 $tituloPagina = $tituloPagina ?? 'Gestión Veterinaria';
+
+$autenticado = isset($_SESSION['id_usuario']);
+$rol = $autenticado ? ($_SESSION['rol'] ?? 'usuario') : null;
+
+$esAdministrador = $autenticado && $rol === 'administrador';
+$esVeterinario = $autenticado && $rol === 'veterinario';
 
 function escaparHtml($valor): string {
     return htmlspecialchars((string)$valor, ENT_QUOTES, 'UTF-8');
@@ -72,29 +76,59 @@ function escaparHtml($valor): string {
                     Inicio
                 </a>
 
-                <a class="nav-link"
-                   href="<?= escaparHtml($baseUrl) ?>clientes/index.php">
-                    Clientes
-                </a>
+                <?php if ($esAdministrador): ?>
 
-                <a class="nav-link"
-                   href="<?= escaparHtml($baseUrl) ?>mascotas/index.php">
-                    Mascotas
-                </a>
+                    <a class="nav-link"
+                       href="<?= escaparHtml($baseUrl) ?>clientes/index.php">
+                        Clientes
+                    </a>
 
-                <a class="nav-link"
-                   href="<?= escaparHtml($baseUrl) ?>veterinarios/index.php">
-                    Veterinarios
-                </a>
+                <?php endif; ?>
 
-                <a class="nav-link"
-                   href="<?= escaparHtml($baseUrl) ?>consultas/index.php">
-                    Consultas
-                </a>
+                <?php if ($autenticado): ?>
 
-                <?php if (isset($_SESSION['id_usuario'])): ?>
+                    <a class="nav-link"
+                       href="<?= escaparHtml($baseUrl) ?>mascotas/index.php">
+                        Mascotas
+                    </a>
 
-                    <!-- Usuario autenticado -->
+                <?php endif; ?>
+
+                <?php if ($esAdministrador): ?>
+
+                    <a class="nav-link"
+                       href="<?= escaparHtml($baseUrl) ?>veterinarios/index.php">
+                        Veterinarios
+                    </a>
+
+                <?php endif; ?>
+
+                <?php if ($esAdministrador || $esVeterinario): ?>
+
+                    <a class="nav-link"
+                       href="<?= escaparHtml($baseUrl) ?>consultas/index.php">
+                        Consultas
+                    </a>
+
+                <?php endif; ?>
+
+                <?php if ($esAdministrador): ?>
+
+                    <a class="nav-link"
+                       href="<?= escaparHtml($baseUrl) ?>usuarios/index.php">
+                        Usuarios
+                    </a>
+
+                <?php endif; ?>
+
+                <?php if ($autenticado): ?>
+
+                    <a class="nav-link"
+                       href="<?= escaparHtml($baseUrl) ?>cambiar_password.php">
+                        <i class="bi bi-key-fill"></i>
+                        Contraseña
+                    </a>
+
                     <a class="nav-link"
                        href="<?= escaparHtml($baseUrl) ?>logout.php">
                         <i class="bi bi-box-arrow-right"></i>
@@ -103,7 +137,6 @@ function escaparHtml($valor): string {
 
                 <?php else: ?>
 
-                    <!-- Visitante -->
                     <a class="nav-link"
                        href="<?= escaparHtml($baseUrl) ?>login.php">
                         <i class="bi bi-box-arrow-in-right"></i>
@@ -123,4 +156,3 @@ function escaparHtml($valor): string {
 
     </div>
 </nav>
-

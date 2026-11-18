@@ -1,6 +1,9 @@
 
 <?php
 require_once __DIR__ . '/../config/Conexion.php';
+require_once __DIR__ . '/../config/Auth.php';
+requerirRol(['administrador']);
+
 
 $conexion = conectarBD();
 

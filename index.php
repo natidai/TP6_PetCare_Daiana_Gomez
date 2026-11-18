@@ -1,8 +1,9 @@
-
 <?php
 require_once __DIR__ . '/config/Conexion.php';
+require_once __DIR__ . '/config/Auth.php';
 
-$conexion = conectarBD();
+$autenticado = usuarioAutenticado();
+$rol = rolActual();
 
 function contarRegistros(PDO $conexion, string $tabla): int {
     $tablasPermitidas = [
@@ -17,77 +18,93 @@ function contarRegistros(PDO $conexion, string $tabla): int {
     }
 
     $consulta = $conexion->query("SELECT COUNT(*) FROM $tabla");
-    return (int) $consulta->fetchColumn();
+    return (int)$consulta->fetchColumn();
 }
 
-$clientes = contarRegistros($conexion, 'clientes');
-$mascotas = contarRegistros($conexion, 'mascotas');
-$veterinarios = contarRegistros($conexion, 'veterinarios');
-$consultas = contarRegistros($conexion, 'consultas');
+$secciones = [];
 
-$secciones = [
-    [
-        'nombre' => 'Clientes',
-        'cantidad' => $clientes,
-        'icono' => 'bi-people-fill',
-        'ruta' => 'clientes'
-    ],
-    [
+if ($autenticado) {
+    $conexion = conectarBD();
+
+    if ($rol === 'administrador') {
+        $secciones[] = [
+            'nombre' => 'Clientes',
+            'cantidad' => contarRegistros($conexion, 'clientes'),
+            'icono' => 'bi-people-fill',
+            'ruta' => 'clientes',
+            'accion' => 'Administrar'
+        ];
+    }
+
+    $secciones[] = [
         'nombre' => 'Mascotas',
-        'cantidad' => $mascotas,
+        'cantidad' => contarRegistros($conexion, 'mascotas'),
         'icono' => 'bi-heart-fill',
-        'ruta' => 'mascotas'
-    ],
-    [
-        'nombre' => 'Veterinarios',
-        'cantidad' => $veterinarios,
-        'icono' => 'bi-bandaid-fill',
-        'ruta' => 'veterinarios'
-    ],
-    [
-        'nombre' => 'Consultas',
-        'cantidad' => $consultas,
-        'icono' => 'bi-clipboard2-pulse-fill',
-        'ruta' => 'consultas'
-    ]
-];
-?>
-<?php
+        'ruta' => 'mascotas',
+        'accion' => $rol === 'administrador'
+            ? 'Administrar' : 'Consultar'
+    ];
+
+    if ($rol === 'administrador') {
+        $secciones[] = [
+            'nombre' => 'Veterinarios',
+            'cantidad' => contarRegistros($conexion, 'veterinarios'),
+            'icono' => 'bi-bandaid-fill',
+            'ruta' => 'veterinarios',
+            'accion' => 'Administrar'
+        ];
+    }
+
+    if (in_array($rol, ['administrador', 'veterinario'], true)) {
+        $secciones[] = [
+            'nombre' => 'Consultas',
+            'cantidad' => contarRegistros($conexion, 'consultas'),
+            'icono' => 'bi-clipboard2-pulse-fill',
+            'ruta' => 'consultas',
+            'accion' => 'Gestionar'
+        ];
+    }
+}
+
 $tituloPagina = 'Gestión Veterinaria';
 require __DIR__ . '/includes/header.php';
 ?>
 
-    <!-- CONTENIDO -->
-    <main class="container py-5">
+<!-- CONTENIDO -->
+<main class="container py-5">
 
-        <!-- BIENVENIDA -->
-        <section class="hero mb-4">
+    <!-- BIENVENIDA -->
+    <section class="hero mb-4">
 
-            <i class="bi bi-heart-fill huella-decorativa"
-               aria-hidden="true"></i>
+        <i class="bi bi-heart-fill huella-decorativa"
+           aria-hidden="true"></i>
 
-            <h1 class="fw-bold">
-                Bienvenidos a PetCare 🐶🐱
-            </h1>
+        <h1 class="fw-bold">
+            Bienvenidos a PetCare 🐶🐱
+        </h1>
 
-            <p class="lead mb-0">
-                Cuidamos a quienes dejan huellas en tu corazón.
-                Un sistema de gestión veterinaria para administrar
-                clientes, mascotas, veterinarios y consultas.
-            </p>
+        <p class="lead mb-0">
+            Cuidamos a quienes dejan huellas en tu corazón.
+            Un sistema de gestión veterinaria para administrar
+            clientes, mascotas, veterinarios y consultas.
+        </p>
 
-        </section>
+    </section>
 
-        <!-- HUELLITAS DECORATIVAS -->
-        <div class="huellitas mb-4" aria-hidden="true">
-            🐾 🐾 🐾 🐾 🐾
-        </div>
+    <!-- HUELLITAS DECORATIVAS -->
+    <div class="huellitas mb-4" aria-hidden="true">
+        🐾 🐾 🐾 🐾 🐾
+    </div>
 
-        <!-- PANEL -->
+    <?php if ($autenticado): ?>
+
         <h2 class="h4 fw-bold mb-4">
             <i class="bi bi-grid-fill"
                style="color: var(--rosa-principal);"></i>
-            Panel de administración
+
+            <?= $rol === 'administrador'
+                ? 'Panel de administración'
+                : 'Panel de PetCare' ?>
         </h2>
 
         <div class="row g-4 mb-5">
@@ -117,7 +134,7 @@ require __DIR__ . '/includes/header.php';
                             </h3>
 
                             <div class="stat-number">
-                                <?= $seccion['cantidad'] ?>
+                                <?= (int)$seccion['cantidad'] ?>
                             </div>
 
                             <p class="text-muted small">
@@ -133,7 +150,12 @@ require __DIR__ . '/includes/header.php';
                                 class="btn btn-petcare w-100">
 
                                 <i class="bi bi-arrow-right-circle"></i>
-                                Administrar
+
+                                <?= htmlspecialchars(
+                                    $seccion['accion'],
+                                    ENT_QUOTES,
+                                    'UTF-8'
+                                ) ?>
 
                             </a>
 
@@ -145,13 +167,37 @@ require __DIR__ . '/includes/header.php';
 
         </div>
 
-        <div class="huellitas" aria-hidden="true">
-            🐾 🐾 🐾
+    <?php else: ?>
+
+        <div class="text-center mb-5">
+            <h2 class="h4 titulo mb-3">
+                Accedé a PetCare
+            </h2>
+
+            <p>
+                Iniciá sesión o registrate para utilizar
+                las funcionalidades del sistema.
+            </p>
+
+            <a href="login.php" class="btn btn-petcare me-2">
+                <i class="bi bi-box-arrow-in-right"></i>
+                Iniciar sesión
+            </a>
+
+            <a href="registro.php"
+               class="btn btn-outline-secondary">
+                <i class="bi bi-person-plus"></i>
+                Registrarse
+            </a>
         </div>
 
-    </main>
+    <?php endif; ?>
 
-    <!-- FOOTER INSTITUCIONAL -->
-   <?php
-require __DIR__ . '/includes/footer.php';
-?> 
+    <div class="huellitas" aria-hidden="true">
+        🐾 🐾 🐾
+    </div>
+
+</main>
+
+<!-- FOOTER INSTITUCIONAL -->
+<?php require __DIR__ . '/includes/footer.php'; ?>

@@ -1,7 +1,7 @@
-
 <?php
 require_once __DIR__ . '/../config/Conexion.php';
-
+require_once __DIR__ . '/../config/Auth.php';
+requerirRol(['administrador', 'veterinario', 'usuario']);
 $conexion = conectarBD();
 
 function escapar($valor): string {
@@ -19,6 +19,8 @@ $datos = [
 
 // Registrar una mascota
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    requerirRol(['administrador']);
+
     foreach ($datos as $campo => $valor) {
         $datos[$campo] = trim((string)($_POST[$campo] ?? ''));
     }
@@ -153,7 +155,7 @@ require __DIR__ . '/../includes/header.php';
             <?= escapar($error) ?>
         </div>
     <?php endif; ?>
-
+    <?php if (tieneRol(['administrador'])): ?>
     <div class="card mb-4">
         <div class="card-body p-4">
 
@@ -264,6 +266,7 @@ require __DIR__ . '/../includes/header.php';
 
         </div>
     </div>
+    <?php endif; ?>
 
     <div class="card">
         <div class="card-body p-4">
@@ -282,7 +285,9 @@ require __DIR__ . '/../includes/header.php';
                             <th>Raza</th>
                             <th>Nacimiento</th>
                             <th>Propietario</th>
-                            <th>Acciones</th>
+                            <?php if (tieneRol(['administrador'])): ?>
+                                <th>Acciones</th>
+                            <?php endif; ?>
                         </tr>
                     </thead>
 
@@ -309,6 +314,7 @@ require __DIR__ . '/../includes/header.php';
                                         $mascota['nombre_cliente']
                                     ) ?>
                                 </td>
+                                <?php if (tieneRol(['administrador'])): ?>
                                 <td>
                                     <div class="d-flex gap-2">
                                         <a class="btn btn-outline-primary btn-sm"
@@ -332,12 +338,13 @@ require __DIR__ . '/../includes/header.php';
                                         </form>
                                     </div>
                                 </td>
+                                <?php endif; ?>
                             </tr>
                         <?php endforeach; ?>
 
                         <?php if (empty($mascotas)): ?>
                             <tr>
-                                <td colspan="6" class="text-center py-4">
+                                <td colspan="<?= tieneRol(['administrador']) ? 6 : 5 ?>" class="text-center py-4">
                                     Todavía no hay mascotas registradas.
                                 </td>
                             </tr>

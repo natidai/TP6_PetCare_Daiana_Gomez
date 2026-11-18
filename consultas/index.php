@@ -1,7 +1,7 @@
-
 <?php
 require_once __DIR__ . '/../config/Conexion.php';
-
+require_once __DIR__ . '/../config/Auth.php';
+requerirRol(['administrador', 'veterinario']);
 $conexion = conectarBD();
 
 function escapar($valor): string {
@@ -510,7 +510,7 @@ require __DIR__ . '/../includes/header.php';
                                             <i class="bi bi-pencil"></i>
                                             Editar
                                         </a>
-
+                                        <?php if (tieneRol(['administrador'])): ?>
                                         <form
                                             method="POST"
                                             action="eliminar.php"
@@ -528,6 +528,7 @@ require __DIR__ . '/../includes/header.php';
                                                 Eliminar
                                             </button>
                                         </form>
+                                        <?php endif; ?>
 
                                     </div>
                                 </td>
