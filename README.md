@@ -74,15 +74,19 @@ Las contraseñas de los usuarios se almacenan mediante hashes.
 Los datos de conexión a MySQL se mantienen en un archivo de configuración independiente, excluido del repositorio público.
 
 ## 7. Ejecución local
+## 7. Ejecución local
 
-1. Instalar y ejecutar XAMPP.
-2. Colocar el proyecto en `C:\xampp\htdocs\TP6_PetCare_Daiana_Gomez`.
-3. Crear la base de datos `petcare` en MySQL.
-4. Importar la estructura de las tablas.
-5. Configurar `config/credenciales.php` con los datos de conexión locales.
-6. Acceder desde el navegador a:
+1. Instalar XAMPP y activar Apache y MySQL.
+2. Colocar el proyecto en `C:\xampp\htdocs\TP6_PetCare_Daiana_Gomez\`.
+3. Crear una base de datos llamada `petcare` desde phpMyAdmin o MySQL Workbench.
+4. Importar el archivo `database/petcare_entrega_completo.sql`, que contiene las cinco tablas, sus relaciones y datos ficticios de prueba.
+5. Crear el archivo `config/credenciales.php` con los datos de conexión correspondientes al entorno local.
+6. Verificar que el puerto de MySQL coincida con el configurado en XAMPP (en el entorno de desarrollo se utilizó el puerto 3307).
+7. Acceder a la aplicación desde:
 
-   http://localhost/TP6_PetCare_Daiana_Gomez/
+http://localhost/TP6_PetCare_Daiana_Gomez/
+
+**Importante:** el archivo SQL de entrega está destinado a una instalación nueva, ya que reemplaza las tablas existentes. No debe importarse sobre la base de datos del sistema publicado.
 
 ## 8. Publicación web
 
@@ -111,7 +115,29 @@ Se realizaron pruebas de:
 
 Se comprobó la conexión con la base de datos del hosting y el registro y eliminación de una consulta médica de prueba.
 
-## 11. Autora
+## 11. Usuarios de prueba para la evaluación
+
+Para facilitar la evaluación del sistema PetCare, se crearon tres cuentas de prueba en la aplicación publicada en InfinityFree, cada una con su rol correspondiente.
+
+| Rol | Correo electrónico |
+|---|---|
+| Administrador | administrador.prueba@ejemplo.com |
+| Veterinario | veterinario.prueba@ejemplo.com |
+| Usuario común | usuario.prueba@ejemplo.com |
+
+**Aplicación web:** https://daiana.rf.gd/TP6_PetCare_Daiana_Gomez/
+
+Las tres cuentas permiten comprobar el inicio de sesión, la gestión de sesiones y las restricciones de acceso según los permisos asignados.
+
+**Contraseñas:** las credenciales de acceso de estas cuentas se proporcionarán al docente por separado, junto con la entrega del trabajo práctico.
+
+### Instalación local
+
+El archivo `database/petcare_entrega_completo.sql` permite crear las cinco tablas e incorporar datos ficticios y usuarios de prueba para una instalación nueva.
+
+Las contraseñas de los usuarios incluidos en el SQL son independientes de las utilizadas en la aplicación publicada y se proporcionarán al docente junto con las instrucciones de evaluación.
+
+## 12. Autora
 
 **Gómez Daiana**
 
