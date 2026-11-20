@@ -1,4 +1,3 @@
-
 <?php
 require_once __DIR__ . '/config/Conexion.php';
 
@@ -36,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (
         mb_strlen($datos['nombre']) > 100 ||
         mb_strlen($datos['apellido']) > 100 ||
-        strlen($datos['email']) > 150
+        mb_strlen($datos['email']) > 150
     ) {
         $error = 'Uno de los campos supera la longitud permitida.';
 
@@ -50,11 +49,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Las contraseñas no coinciden.';
 
     } else {
+        $datos['email'] = function_exists('mb_strtolower')
+            ? mb_strtolower($datos['email'], 'UTF-8')
+            : strtolower($datos['email']);
+
         try {
             $verificar = $conexion->prepare(
                 "SELECT COUNT(*)
                  FROM usuarios
-                 WHERE email = :email"
+                 WHERE LOWER(email) = LOWER(:email)"
             );
 
             $verificar->execute([
@@ -79,21 +82,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                       :contrasena, 'usuario', 1)"
                 );
 
-                $insertar->execute([
-                    ':nombre' => $datos['nombre'],
-                    ':apellido' => $datos['apellido'],
-                    ':email' => $datos['email'],
-                    ':contrasena' => $hash
-                ]);
+                try {
+                    $insertar->execute([
+                        ':nombre' => $datos['nombre'],
+                        ':apellido' => $datos['apellido'],
+                        ':email' => $datos['email'],
+                        ':contrasena' => $hash
+                    ]);
+                } catch (PDOException $e) {
+                    // 1062 = correo duplicado (único de MySQL), incluso si
+                    // dos registros se enviaron al mismo tiempo.
+                    if ((int)$e->errorInfo[1] === 1062) {
+                        $error = 'Ya existe una cuenta con ese correo.';
+                    } else {
+                        throw $e;
+                    }
+                }
 
-                header('Location: login.php?registrado=1');
-                exit;
+                if ($error === '') {
+                    header('Location: login.php?registrado=1');
+                    exit;
+                }
             }
 
-   } catch (PDOException $e) {
-    error_log($e->getMessage());
-    $error = 'No se pudo completar el registro.';
-}
+        } catch (PDOException $e) {
+            error_log($e->getMessage());
+            $error = 'No se pudo completar el registro.';
+        }
     }
 }
 
