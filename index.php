@@ -199,5 +199,8 @@ require __DIR__ . '/includes/header.php';
 
 </main>
 
+<!-- ASISTENTE VIRTUAL DAIBOT -->
+<?php require_once __DIR__ . '/includes/daibot.php'; ?>
+
 <!-- FOOTER INSTITUCIONAL -->
 <?php require __DIR__ . '/includes/footer.php'; ?>
